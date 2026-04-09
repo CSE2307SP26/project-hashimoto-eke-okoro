@@ -6,6 +6,7 @@ import com.bank.model.Transaction;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.Test;
 
@@ -124,5 +125,42 @@ public class BankAccountTest {
         account2.deposit(200);
         assertEquals(500, account1.getBalance(), 0.01);
         assertEquals(200, account2.getBalance(), 0.01);
+    }
+
+    //Close a bank account
+    @Test
+    public void testCloseAccount() {
+        BankAccount testAccount = new BankAccount("Test User");
+        testAccount.close();
+        assertEquals(false, testAccount.isActive());
+    }
+
+
+    @Test
+    public void testDepositIntoClosedAccount() {
+        BankAccount testAccount = new BankAccount("Test User");
+        testAccount.close();
+        assertThrows(IllegalStateException.class, () -> testAccount.deposit(100));
+    }
+
+    @Test
+    public void testWithdrawFromClosedAccount() {
+        BankAccount testAccount = new BankAccount("Test User");
+        testAccount.deposit(100);
+        testAccount.close();
+        assertThrows(IllegalStateException.class, () -> testAccount.withdraw(50));
+    }
+
+    @Test
+    public void testCloseAlreadyClosedAccount() {
+        BankAccount testAccount = new BankAccount("Test User");
+        testAccount.close();
+        assertThrows(IllegalStateException.class, () -> testAccount.close());
+    }
+
+    @Test
+    public void testNewAccountIsActive() {
+        BankAccount testAccount = new BankAccount("Test User");
+        assertEquals(true, testAccount.isActive());
     }
 }
