@@ -3,13 +3,18 @@ package main;
 import com.bank.model.Transaction;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class BankAccount {
 
+    private final String accountId;
+    private final String accountHolderName;
     private double balance;
     private List<Transaction> transactionHistory;
 
-    public BankAccount() {
+    public BankAccount(String accountHolderName) {
+        this.accountId = UUID.randomUUID().toString().substring(0, 8);
+        this.accountHolderName = accountHolderName;
         this.balance = 0;
         this.transactionHistory = new ArrayList<>();
     }
@@ -38,5 +43,18 @@ public class BankAccount {
 
     public List<Transaction> getTransactionHistory() {
         return this.transactionHistory;
+    }
+
+    public String getAccountId() {
+        return this.accountId;
+    }
+
+    public String getAccountHolderName() {
+        return this.accountHolderName;
+    }
+
+    @Override
+    public String toString() {
+        return accountId + " - " + accountHolderName + " ($" + String.format("%.2f", balance) + ")";
     }
 }
