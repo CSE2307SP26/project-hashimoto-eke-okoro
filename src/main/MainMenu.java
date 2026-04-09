@@ -7,8 +7,8 @@ import java.util.Scanner;
 
 public class MainMenu {
 
-    private static final int EXIT_SELECTION = 8;
-    private static final int MAX_SELECTION = 8;
+    private static final int EXIT_SELECTION = 10;
+    private static final int MAX_SELECTION = 10;
 
     private List<BankAccount> accounts;
     private BankAccount currentAccount;
@@ -34,7 +34,9 @@ public class MainMenu {
         System.out.println("5. Check balance");
         System.out.println("6. View transaction history");
         System.out.println("7. Close this account");
-        System.out.println("8. Exit the app");
+        System.out.println("8. Transfer money");
+        System.out.println("9. Collect fee (Admin)");
+        System.out.println("10. Exit the app");
     }
 
     public int getUserSelection(int max) {
@@ -69,6 +71,12 @@ public class MainMenu {
             case 7:
                 closeAccount();
                 break;
+            case 8: 
+                performTransfer(); 
+                break;
+            case 9: 
+               performCollectFee(); 
+               break;
         }
     }
 
@@ -134,6 +142,65 @@ public class MainMenu {
             return;
         }
         System.out.println("Your balance is: $" + String.format("%.2f", currentAccount.getBalance()));
+    }
+
+    public void performTransfer() {
+        if (currentAccount == null) {
+            System.out.println("No account selected. Create / select one first.");
+            return;
+        }
+        if (accounts.size() < 2) {
+            System.out.println("Need at least two open accounts to make a transfer.");
+            return;
+        }
+        
+        System.out.println("Available destination accounts:");
+        for (int i = 0; i < accounts.size(); i++) {
+            if (accounts.get(i) != currentAccount) {
+                System.out.println("  " + (i + 1) + ". " + accounts.get(i));
+            }
+        }
+        
+        int choice = getUserSelection(accounts.size());
+        BankAccount destination = accounts.get(choice - 1);
+        
+        if (destination == currentAccount) {
+            System.out.println("You cannot transfer money to the same account.");
+            return;
+        }
+
+        double transferAmount = -1;
+        while(transferAmount < 0 || transferAmount > currentAccount.getBalance()) {
+            System.out.print("How much would you like to transfer: ");
+            transferAmount = keyboardInput.nextInt(); 
+        }
+        
+        try {
+            currentAccount.transfer(destination, transferAmount);
+            System.out.println("Transfer successful.");
+        } catch (Exception e) {
+            System.out.println("Transfer failed: " + e.getMessage());
+        }
+    }
+
+    public void performCollectFee() {
+        if (currentAccount == null) {
+            System.out.println("No account selected. Create or select one first.");
+            return;
+        }
+        
+        double feeAmount = -1;
+        while(feeAmount < 0) {
+            System.out.print("Enter fee amount to collect: ");
+            feeAmount = keyboardInput.nextInt(); 
+        }
+        
+        try {
+            currentAccount.collectFee(feeAmount);
+            System.out.println("Fee collected successfully. New Balance: $" + String.format("%.2f", currentAccount.getBalance()));
+        } catch (Exception e) {
+            System.out.println("Fee collection failed: " + e.getMessage());
+        }
     }
 
     public void viewTransactionHistory() {
