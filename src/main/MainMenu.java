@@ -7,8 +7,8 @@ import java.util.Scanner;
 
 public class MainMenu {
 
-    private static final int EXIT_SELECTION = 7;
-    private static final int MAX_SELECTION = 7;
+    private static final int EXIT_SELECTION = 8;
+    private static final int MAX_SELECTION = 8;
 
     private List<BankAccount> accounts;
     private BankAccount currentAccount;
@@ -33,7 +33,8 @@ public class MainMenu {
         System.out.println("4. Make a withdrawal");
         System.out.println("5. Check balance");
         System.out.println("6. View transaction history");
-        System.out.println("7. Exit the app");
+        System.out.println("7. Close this account");
+        System.out.println("8. Exit the app");
     }
 
     public int getUserSelection(int max) {
@@ -64,6 +65,9 @@ public class MainMenu {
                 break;
             case 6:
                 viewTransactionHistory();
+                break;
+            case 7:
+                closeAccount();
                 break;
         }
     }
@@ -159,5 +163,15 @@ public class MainMenu {
     public static void main(String[] args) {
         MainMenu bankApp = new MainMenu();
         bankApp.run();
+    }
+
+    public void closeAccount() {
+        if (currentAccount == null) {
+            System.out.println("No account selected. Create or select one first.");
+            return;
+        }
+        currentAccount.close();
+        System.out.println("Account closed: " + currentAccount);
+        currentAccount = null;
     }
 }
