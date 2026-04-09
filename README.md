@@ -2,6 +2,11 @@
 
 ## Team Members:
 
+* 
+* 
+* 
+* 
+=======
 * Louis Hashimoto
 * Kelenna Eke Okoro
 * 
@@ -12,6 +17,9 @@
 ## User stories
 
 1. A bank customer should be able to deposit into an existing account. (Shook)
+2. A bank customer should be able to withdraw from an account. 
+3. A bank customer should be able to check their account balance. 
+4. A bank customer should be able to view their transaction history for an account. 
 2. A bank customer should be able to withdraw from an account. (Kelenna)
 3. A bank customer should be able to check their account balance. (Kelenna)
 4. A bank customer should be able to view their transaction history for an account. (Hashimoto)
