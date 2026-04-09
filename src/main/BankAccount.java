@@ -64,6 +64,33 @@ public class BankAccount {
         return this.accountHolderName;
     }
 
+    public void transfer(BankAccount destinationAccount, double amount) {
+        if (!this.active || !destinationAccount.isActive()) {
+            throw new IllegalStateException("One or both accounts not active");
+        }
+        if (amount > 0 && amount <= this.balance) {
+            this.balance -= amount;
+            this.transactionHistory.add(new Transaction(Transaction.Type.TRANSFER_OUT, amount, this.balance, "Transfer to " + destinationAccount.getAccountId()));
+            
+            destinationAccount.balance += amount; 
+            destinationAccount.transactionHistory.add(new Transaction(Transaction.Type.TRANSFER_IN, amount, destinationAccount.balance, "Transfer from " + this.accountId));
+        } else {
+            throw new IllegalArgumentException("Invalid amount");
+        }
+    }
+
+    public void collectFee(double amount) {
+        if (!this.active) {
+            throw new IllegalStateException("Account is not active");
+        }
+        if (amount > 0) {
+            this.balance -= amount;
+            this.transactionHistory.add(new Transaction(Transaction.Type.FEE, amount, this.balance, "Fee Collection"));
+        } else {
+            throw new IllegalArgumentException("Invalid fee amount");
+        }
+    }
+
     @Override
     public String toString() {
         return accountId + " - " + accountHolderName + " ($" + String.format("%.2f", balance) + ")";

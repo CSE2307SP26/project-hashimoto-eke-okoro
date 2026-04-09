@@ -163,4 +163,50 @@ public class BankAccountTest {
         BankAccount testAccount = new BankAccount("Test User");
         assertEquals(true, testAccount.isActive());
     }
+
+    //transfer
+    
+    @Test
+    public void testTransferSuccess() {
+        BankAccount account1 = new BankAccount("User 1");
+        BankAccount account2 = new BankAccount("User 2");
+        account1.deposit(100);
+        account1.transfer(account2, 40);
+        assertEquals(60, account1.getBalance(), 0.01);
+        assertEquals(40, account2.getBalance(), 0.01);
+    }
+
+    @Test
+    public void testTransferInsufficientFunds() {
+        BankAccount account1 = new BankAccount("User 1");
+        BankAccount account2 = new BankAccount("User 2");
+        account1.deposit(50);
+        assertThrows(IllegalArgumentException.class, () -> account1.transfer(account2, 100));
+    }
+
+    @Test
+    public void testTransferWithClosedAccount() {
+        BankAccount account1 = new BankAccount("User 1");
+        BankAccount account2 = new BankAccount("User 2");
+        account1.deposit(100);
+        account2.close();
+        assertThrows(IllegalStateException.class, () -> account1.transfer(account2, 40));
+    }
+
+    //collect Fee
+
+    @Test
+    public void testCollectFeeSuccess() {
+        BankAccount testAccount = new BankAccount("Test User");
+        testAccount.deposit(100);
+        testAccount.collectFee(15);
+        assertEquals(85, testAccount.getBalance(), 0.01);
+    }
+
+    @Test
+    public void testCollectFeeNegativeAmount() {
+        BankAccount testAccount = new BankAccount("Test User");
+        testAccount.deposit(100);
+        assertThrows(IllegalArgumentException.class, () -> testAccount.collectFee(-10));
+    }
 }
