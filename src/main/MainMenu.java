@@ -44,7 +44,12 @@ public class MainMenu {
         int selection = -1;
         while(selection < 1 || selection > max) {
             System.out.print("Please make a selection: ");
-            selection = keyboardInput.nextInt();
+            try {
+                selection = keyboardInput.nextInt();
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter a number between 1 and " + max + ".");
+                keyboardInput.next();
+            }
         }
         return selection;
     }
@@ -120,7 +125,12 @@ public class MainMenu {
         double depositAmount = -1;
         while(depositAmount < 0) {
             System.out.print("How much would you like to deposit: ");
-            depositAmount = keyboardInput.nextInt();
+            try {
+                depositAmount = keyboardInput.nextDouble();
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter a valid number for the deposit amount.");
+                keyboardInput.next(); 
+            }
         }
         currentAccount.deposit(depositAmount);
         System.out.println("Deposit successful. Balance: $" + String.format("%.2f", currentAccount.getBalance()));
@@ -134,7 +144,12 @@ public class MainMenu {
         double withdrawAmount = -1;
         while(withdrawAmount < 0 || withdrawAmount > currentAccount.getBalance()) {
             System.out.print("How much would you like to withdraw: ");
-            withdrawAmount = keyboardInput.nextInt();
+            try {
+                withdrawAmount = keyboardInput.nextDouble();
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter a valid number for the withdrawal amount.");
+                keyboardInput.next(); 
+            }
         }
         currentAccount.withdraw(withdrawAmount);
         System.out.println("Withdrawal successful.");
@@ -158,33 +173,48 @@ public class MainMenu {
             return;
         }
         
+        BankAccount destination = selectDestinationAccount();
+        if (destination == null) return;
+
+        double amount = getTransferAmount();
+        if (amount <= 0) return;
+
+        try {
+            currentAccount.transfer(destination, amount);
+            System.out.println("Transfer successful.");
+        } catch (Exception e) {
+            System.out.println("Transfer failed: " + e.getMessage());
+        }
+    }
+
+    private BankAccount selectDestinationAccount() {
         System.out.println("Available destination accounts:");
         for (int i = 0; i < accounts.size(); i++) {
             if (accounts.get(i) != currentAccount) {
                 System.out.println("  " + (i + 1) + ". " + accounts.get(i));
             }
         }
-        
         int choice = getUserSelection(accounts.size());
         BankAccount destination = accounts.get(choice - 1);
-        
         if (destination == currentAccount) {
             System.out.println("You cannot transfer money to the same account.");
-            return;
+            return null;
         }
+        return destination;
+    }
 
-        double transferAmount = -1;
-        while(transferAmount < 0 || transferAmount > currentAccount.getBalance()) {
+    private double getTransferAmount() {
+        double amount = -1;
+        while (amount < 0 || amount > currentAccount.getBalance()) {
             System.out.print("How much would you like to transfer: ");
-            transferAmount = keyboardInput.nextInt(); 
+            try {
+                amount = keyboardInput.nextDouble();
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+                keyboardInput.next();
+            }
         }
-        
-        try {
-            currentAccount.transfer(destination, transferAmount);
-            System.out.println("Transfer successful.");
-        } catch (Exception e) {
-            System.out.println("Transfer failed: " + e.getMessage());
-        }
+        return amount;
     }
 
     public void performCollectFee() {
@@ -196,7 +226,12 @@ public class MainMenu {
         double feeAmount = -1;
         while(feeAmount < 0) {
             System.out.print("Enter fee amount to collect: ");
-            feeAmount = keyboardInput.nextInt(); 
+            try {
+                feeAmount = keyboardInput.nextDouble();
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter a valid number for the fee amount.");
+                keyboardInput.next(); 
+            }
         }
         
         try {
@@ -215,7 +250,13 @@ public class MainMenu {
         double rate = -1;
         while (rate <= 0) {
             System.out.print("Enter interest rate (%): ");
-            rate = keyboardInput.nextInt();
+
+            try {
+                rate = keyboardInput.nextDouble();
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter a valid number for the interest rate.");
+                keyboardInput.next(); // Clear the invalid input
+            }
         }
         currentAccount.addInterest(rate);
         System.out.println("Interest added. New balance: $" + String.format("%.2f", currentAccount.getBalance()));

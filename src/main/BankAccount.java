@@ -1,9 +1,10 @@
 package main;
 
-import com.bank.model.Transaction;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import com.bank.model.Transaction;
 
 public class BankAccount {
 
@@ -83,12 +84,14 @@ public class BankAccount {
         if (!this.active) {
             throw new IllegalStateException("Account is not active");
         }
-        if (amount > 0) {
-            this.balance -= amount;
-            this.transactionHistory.add(new Transaction(Transaction.Type.FEE, amount, this.balance, "Fee Collection"));
-        } else {
+        if (amount <= 0) {
             throw new IllegalArgumentException("Invalid fee amount");
         }
+        if (amount > this.balance) {
+            throw new IllegalArgumentException("Fee exceeds account balance");
+        }
+        this.balance -= amount;
+        this.transactionHistory.add(new Transaction(Transaction.Type.FEE, amount, this.balance, "Fee Collection"));
     }
 
     public void addInterest(double rate) {
