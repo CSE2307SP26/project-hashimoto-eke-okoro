@@ -7,8 +7,8 @@ import java.util.Scanner;
 
 public class MainMenu {
 
-    private static final int EXIT_SELECTION = 10;
-    private static final int MAX_SELECTION = 10;
+    private static final int EXIT_SELECTION = 11;
+    private static final int MAX_SELECTION = 11;
 
     private List<BankAccount> accounts;
     private BankAccount currentAccount;
@@ -36,7 +36,8 @@ public class MainMenu {
         System.out.println("7. Close this account");
         System.out.println("8. Transfer money");
         System.out.println("9. Collect fee (Admin)");
-        System.out.println("10. Exit the app");
+        System.out.println("10. Add interest (Admin)");
+        System.out.println("11. Exit the app");
     }
 
     public int getUserSelection(int max) {
@@ -70,13 +71,16 @@ public class MainMenu {
                 break;
             case 7:
                 closeAccount();
-                break;
+                break; 
             case 8: 
                 performTransfer(); 
                 break;
             case 9: 
                performCollectFee(); 
                break;
+            case 10: 
+                addInterest(); 
+                break;
         }
     }
 
@@ -201,6 +205,20 @@ public class MainMenu {
         } catch (Exception e) {
             System.out.println("Fee collection failed: " + e.getMessage());
         }
+    }
+
+    public void addInterest() {
+        if (currentAccount == null) {
+            System.out.println("No account selected. Create or select one first.");
+            return;
+        }
+        double rate = -1;
+        while (rate <= 0) {
+            System.out.print("Enter interest rate (%): ");
+            rate = keyboardInput.nextInt();
+        }
+        currentAccount.addInterest(rate);
+        System.out.println("Interest added. New balance: $" + String.format("%.2f", currentAccount.getBalance()));
     }
 
     public void viewTransactionHistory() {
