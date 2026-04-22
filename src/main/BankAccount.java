@@ -91,6 +91,18 @@ public class BankAccount {
         }
     }
 
+    public void addInterest(double rate) {
+        if (!this.active) {
+            throw new IllegalStateException("Account is not active");
+        }
+        if (rate <= 0) {
+            throw new IllegalArgumentException();
+        }
+        double interestAmount = this.balance * (rate / 100);
+        this.balance += interestAmount;
+        this.transactionHistory.add(new Transaction(Transaction.Type.INTEREST, interestAmount, balance, "Interest at " + rate + "%"));
+    }
+
     @Override
     public String toString() {
         return accountId + " - " + accountHolderName + " ($" + String.format("%.2f", balance) + ")";
