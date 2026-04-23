@@ -7,8 +7,8 @@ import java.util.Scanner;
 
 public class MainMenu {
 
-    private static final int EXIT_SELECTION = 12;
-    private static final int MAX_SELECTION = 12;
+    private static final int EXIT_SELECTION = 13;
+    private static final int MAX_SELECTION = 13;
 
     private List<BankAccount> accounts;
     private BankAccount currentAccount;
@@ -37,8 +37,9 @@ public class MainMenu {
         System.out.println("8. Transfer money");
         System.out.println("9. Collect fee (Admin)");
         System.out.println("10. Add interest (Admin)");
-        System.out.println("11. Set Account Nickname"); // New Option
-        System.out.println("12. Exit the app");
+        System.out.println("11. Set Account Nickname"); 
+        System.out.println("12. View mini-statement"); 
+        System.out.println("13. Exit the app");
     }
 
     public int getUserSelection(int max) {
@@ -89,6 +90,9 @@ public class MainMenu {
                 break;
             case 11: 
                 setAccountNickname(); 
+                break;
+            case 12:
+                viewMiniStatement();
                 break;
         }
     }
@@ -190,6 +194,34 @@ public class MainMenu {
             System.out.println("Transfer failed: " + e.getMessage());
         }
     }
+
+    public void viewMiniStatement() {
+    if (currentAccount == null) {
+        System.out.println("No account selected. Create or select one first.");
+        return;
+    }
+    if (currentAccount.getTransactionHistory().isEmpty()) {
+        System.out.println("No transactions yet.");
+        return;
+    }
+
+    int n = -1;
+    while (n <= 0) {
+        System.out.print("How many recent transactions would you like to view? ");
+        try {
+            n = keyboardInput.nextInt();
+        } catch (Exception e) {
+            System.out.println("Invalid input. Please enter a valid number.");
+            keyboardInput.next();
+        }
+    }
+
+    List<Transaction> recent = currentAccount.getRecentTransactions(n);
+    System.out.println("--- Mini-Statement (Last " + recent.size() + " Transactions) ---");
+    for (Transaction t : recent) {
+        System.out.println("  " + t);
+    }
+}
 
     private BankAccount selectDestinationAccount() {
         System.out.println("Available destination accounts:");
