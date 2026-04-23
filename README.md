@@ -35,7 +35,7 @@ enhancement (Kelenna)
 
 
 ## What user stories do you intend to complete next iteration?
-We intend to complete the following stories. We have completed at the moement stories 1-11. 
+ We have completed the moment stories 1-11. As there are no more iterations, no more stories will be completed.
 
 
 
