@@ -10,6 +10,7 @@ public class BankAccount {
 
     private final String accountId;
     private final String accountHolderName;
+    private String nickname;
     private boolean active;
     private double balance;
     private List<Transaction> transactionHistory;
@@ -20,6 +21,7 @@ public class BankAccount {
         this.active = true;
         this.balance = 0;
         this.transactionHistory = new ArrayList<>();
+        this.nickname = "";
     }
 
     public void deposit(double amount) {
@@ -59,6 +61,14 @@ public class BankAccount {
     public String getAccountId() {
 
         return this.accountId;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+    
+    public String getNickname() {
+        return this.nickname;
     }
 
     public String getAccountHolderName() {
@@ -108,8 +118,9 @@ public class BankAccount {
 
     @Override
     public String toString() {
-        return accountId + " - " + accountHolderName + " ($" + String.format("%.2f", balance) + ")";
-    }
+        String displayName = nickname.isEmpty() ? accountHolderName : accountHolderName + " (" + nickname + ")";
+        return accountId + " - " + displayName + " ($" + String.format("%.2f", balance) + ")";
+}
 
     public void close() {
         if (!active) {
