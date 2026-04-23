@@ -7,8 +7,8 @@ import java.util.Scanner;
 
 public class MainMenu {
 
-    private static final int EXIT_SELECTION = 11;
-    private static final int MAX_SELECTION = 11;
+    private static final int EXIT_SELECTION = 12;
+    private static final int MAX_SELECTION = 12;
 
     private List<BankAccount> accounts;
     private BankAccount currentAccount;
@@ -37,7 +37,8 @@ public class MainMenu {
         System.out.println("8. Transfer money");
         System.out.println("9. Collect fee (Admin)");
         System.out.println("10. Add interest (Admin)");
-        System.out.println("11. Exit the app");
+        System.out.println("11. Set Account Nickname"); // New Option
+        System.out.println("12. Exit the app");
     }
 
     public int getUserSelection(int max) {
@@ -85,6 +86,9 @@ public class MainMenu {
                break;
             case 10: 
                 addInterest(); 
+                break;
+            case 11: 
+                setAccountNickname(); 
                 break;
         }
     }
@@ -215,6 +219,20 @@ public class MainMenu {
             }
         }
         return amount;
+    }
+
+    public void setAccountNickname() {
+        if (currentAccount == null) {
+            System.out.println("No account selected. Create or select one first.");
+            return;
+        }
+
+        keyboardInput.nextLine();
+        System.out.print("Enter a nickname for this account: ");
+        String nickname = keyboardInput.nextLine().trim();
+
+        currentAccount.setNickname(nickname);
+        System.out.println("Nickname set successfully! Account is now: " + currentAccount);
     }
 
     public void performCollectFee() {
