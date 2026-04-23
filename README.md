@@ -19,31 +19,23 @@
 6. A bank customer should be able to close an existing account. (Hashimoto)
 7. A bank customer should be able to transfer money from one account to another. (Kelenna)
 8. A bank adminstrator should be able to collect fees from existing accounts when necessary. (Kelenna)
-<<<<<<< HEAD
 9. A bank adminstrator should be able to add an interest payment to an existing account when necessary. (Hashimoto)
-A bank customer should be able to view a mini-statement showing only the last N transactions for an account. (Kelenna)
-A bank customer should be able to assign a custom nickname to their accounts for easier identification.
+10. A bank customer should be able to view a mini-statement showing only the last N transactions for an account. (Kelenna)
+11. A bank customer should be able to assign a custom nickname to their accounts for easier identification.
 enhancement (Kelenna)
 
 ## Completed this iteration:
 
 9. A bank adminstrator should be able to add an interest payment to an existing account when necessary. (Hashimoto)
-A bank customer should be able to view a mini-statement showing only the last N transactions for an account. (Kelenna)
-A bank customer should be able to assign a custom nickname to their accounts for easier identification.
+10. A bank customer should be able to view a mini-statement showing only the last N transactions for an account. (Kelenna)
+11. A bank customer should be able to assign a custom nickname to their accounts for easier identification.
 enhancement (Kelenna)
 
 
 
-## What user stories do you intend to complete next iteration?
-=======
-9. A bank adminstrator should be able to add an interest payment to an existing account when necessary.
-10. A bank customer should be able to view a mini-statement showing only the last N transactions for an account. (Kelenna)
-11. A bank customer should be able to assign a custom nickname to their accounts for easier identification. (Kelenna)
-
 
 ## What user stories do you intend to complete next iteration?
 We intend to complete the following stories. We have completed at the moement stories 1-11. 
->>>>>>> 910aa98f72309f82599f368232938b52302cd37b
 
 
 
