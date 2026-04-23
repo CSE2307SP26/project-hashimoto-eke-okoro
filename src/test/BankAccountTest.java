@@ -252,4 +252,55 @@ public class BankAccountTest {
         testAccount.deposit(50);
         assertThrows(IllegalArgumentException.class, () -> testAccount.collectFee(100));
     }
+
+    //Nickname
+
+    @Test
+    public void testSetNickname() {
+        BankAccount testAccount = new BankAccount("Test User");
+        testAccount.setNickname("Savings");
+        assertEquals("Savings", testAccount.getNickname());
+    }
+
+    @Test
+    public void testNicknameStartsEmpty() {
+        BankAccount testAccount = new BankAccount("Test User");
+        assertEquals("", testAccount.getNickname());
+    }
+
+    //Mini-statement
+
+    @Test
+    public void testRecentTransactionsReturnsCorrectCount() {
+        BankAccount testAccount = new BankAccount("Test User");
+        testAccount.deposit(100);
+        testAccount.deposit(200);
+        testAccount.deposit(300);
+        testAccount.withdraw(50);
+        assertEquals(2, testAccount.getRecentTransactions(2).size());
+    }
+
+    @Test
+    public void testRecentTransactionsReturnsLatest() {
+        BankAccount testAccount = new BankAccount("Test User");
+        testAccount.deposit(100);
+        testAccount.deposit(200);
+        testAccount.withdraw(50);
+        List<Transaction> recent = testAccount.getRecentTransactions(1);
+        assertEquals(Transaction.Type.WITHDRAWAL, recent.get(0).getType());
+    }
+
+    @Test
+    public void testRecentTransactionsMoreThanExist() {
+        BankAccount testAccount = new BankAccount("Test User");
+        testAccount.deposit(100);
+        assertEquals(1, testAccount.getRecentTransactions(5).size());
+    }
+
+    @Test
+    public void testRecentTransactionsZero() {
+        BankAccount testAccount = new BankAccount("Test User");
+        testAccount.deposit(100);
+        assertEquals(0, testAccount.getRecentTransactions(0).size());
+    }
 }
