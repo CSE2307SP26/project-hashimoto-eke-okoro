@@ -116,6 +116,15 @@ public class BankAccount {
         this.transactionHistory.add(new Transaction(Transaction.Type.INTEREST, interestAmount, balance, "Interest at " + rate + "%"));
     }
 
+    public List<Transaction> getRecentTransactions(int n) {
+        if (n <= 0) {
+            return new ArrayList<>();
+        }
+        int size = this.transactionHistory.size();
+        int startIndex = Math.max(0, size - n); 
+        return this.transactionHistory.subList(startIndex, size);
+    }
+
     @Override
     public String toString() {
         String displayName = nickname.isEmpty() ? accountHolderName : accountHolderName + " (" + nickname + ")";
