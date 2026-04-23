@@ -1,14 +1,16 @@
 package main;
 
-import com.bank.model.Transaction;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import com.bank.model.Transaction;
 
 public class BankAccount {
 
     private final String accountId;
     private final String accountHolderName;
+    private String nickname;
     private boolean active;
     private double balance;
     private List<Transaction> transactionHistory;
@@ -19,6 +21,7 @@ public class BankAccount {
         this.active = true;
         this.balance = 0;
         this.transactionHistory = new ArrayList<>();
+        this.nickname = "";
     }
 
     public void deposit(double amount) {
@@ -60,6 +63,14 @@ public class BankAccount {
         return this.accountId;
     }
 
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+    
+    public String getNickname() {
+        return this.nickname;
+    }
+
     public String getAccountHolderName() {
         return this.accountHolderName;
     }
@@ -83,18 +94,42 @@ public class BankAccount {
         if (!this.active) {
             throw new IllegalStateException("Account is not active");
         }
-        if (amount > 0) {
-            this.balance -= amount;
-            this.transactionHistory.add(new Transaction(Transaction.Type.FEE, amount, this.balance, "Fee Collection"));
-        } else {
+        if (amount <= 0) {
             throw new IllegalArgumentException("Invalid fee amount");
         }
+        if (amount > this.balance) {
+            throw new IllegalArgumentException("Fee exceeds account balance");
+        }
+        this.balance -= amount;
+        this.transactionHistory.add(new Transaction(Transaction.Type.FEE, amount, this.balance, "Fee Collection"));
+    }
+
+    public void addInterest(double rate) {
+        if (!this.active) {
+            throw new IllegalStateException("Account is not active");
+        }
+        if (rate <= 0) {
+            throw new IllegalArgumentException();
+        }
+        double interestAmount = this.balance * (rate / 100);
+        this.balance += interestAmount;
+        this.transactionHistory.add(new Transaction(Transaction.Type.INTEREST, interestAmount, balance, "Interest at " + rate + "%"));
+    }
+
+    public List<Transaction> getRecentTransactions(int n) {
+        if (n <= 0) {
+            return new ArrayList<>();
+        }
+        int size = this.transactionHistory.size();
+        int startIndex = Math.max(0, size - n); 
+        return this.transactionHistory.subList(startIndex, size);
     }
 
     @Override
     public String toString() {
-        return accountId + " - " + accountHolderName + " ($" + String.format("%.2f", balance) + ")";
-    }
+        String displayName = nickname.isEmpty() ? accountHolderName : accountHolderName + " (" + nickname + ")";
+        return accountId + " - " + displayName + " ($" + String.format("%.2f", balance) + ")";
+}
 
     public void close() {
         if (!active) {
